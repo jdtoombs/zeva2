@@ -14,6 +14,7 @@ import { Role } from "@/prisma/generated/client";
 export interface INavbarOption {
   label: string;
   route: string;
+  role: Role;
 }
 
 export interface INavbarProps {
@@ -24,20 +25,30 @@ export interface INavbarProps {
 export const Navbar: React.FC<INavbarProps> = ({ user }) => {
   const pathname = usePathname();
   const [showUserDropDown, setShowUserDropDown] = React.useState(false);
-  console.log(user);
 
   const navItems: INavbarOption[] = [
-    { label: 'Home', route: Routes.Home },
-    { label: 'Compliance Reporting', route: Routes.ComplianceReporting },
-    { label: 'Credit Transactions', route: Routes.CreditTransactions },
-    { label: 'ZEV Models', route: Routes.ZEVModels },
-    { label: 'Vehicle Suppliers', route: Routes.VehicleSuppliers },
-    { label: 'Administration', route: Routes.Administration }
+    { label: 'Home', route: Routes.Home, role: Role.ZEVA_USER },
+    { label: 'Compliance Reporting', route: Routes.ComplianceReporting, role: Role.ZEVA_USER },
+    { label: 'Credit Transactions', route: Routes.CreditTransactions, role: Role.ZEVA_USER },
+    { label: 'ZEV Models', route: Routes.ZEVModels, role: Role.ZEVA_USER },
+    { label: 'Vehicle Suppliers', route: Routes.VehicleSuppliers, role: Role.ZEVA_USER },
+    { label: 'Administration', route: Routes.Administration, role: Role.ORGANIZATION_ADMINISTRATOR }
   ];
 
   return (
-    <div className="flex flex-row w-full bg-defaultBackgroundBlue border-t-2 border-primaryYellow mr-[16rem] px-1 z-0">
-      {navItems.map(item => (
+    <div className="flex flex-row w-full bg-defaultBackgroundBlue border-t-2 border-primaryYellow mr-[16rem] px-1 mb-1">
+      {navItems.map(item => {
+        if (user.roles?.includes(item.role) || user.roles?.includes(Role.ADMINISTRATOR)) {
+          return (
+            <Link
+              key={item.label}
+              href={item.route}
+              className={`cursor-pointer px-2 ${pathname === item.route ? 'border-b-2 border-primaryYellow' : ''}`}
+            >
+              {item.label}
+            </Link>
+          );
+        }
         <Link
           key={item.label}
           href={item.route}
@@ -45,7 +56,7 @@ export const Navbar: React.FC<INavbarProps> = ({ user }) => {
         >
           {item.label}
         </Link>
-      ))}
+      })}
       <div className='ml-auto relative'>
         <div
           onClick={() => setShowUserDropDown(!showUserDropDown)}
