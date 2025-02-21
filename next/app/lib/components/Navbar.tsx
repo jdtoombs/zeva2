@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from 'react';
@@ -9,7 +8,6 @@ import { User } from '@auth/core/types';
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { keycloakSignOut } from '../actions/keycloak';
 import { Role } from "@/prisma/generated/client";
-
 
 export interface INavbarOption {
   label: string;
@@ -37,7 +35,7 @@ export const Navbar: React.FC<INavbarProps> = ({ user }) => {
 
   return (
     <div className="flex flex-row w-full bg-defaultBackgroundBlue border-t-2 border-primaryYellow mr-[16rem] px-1 mb-1">
-      {navItems.map(item => {
+      {navItems.map((item) => {
         if (user.roles?.includes(item.role) || user.roles?.includes(Role.ADMINISTRATOR)) {
           return (
             <Link
@@ -49,20 +47,15 @@ export const Navbar: React.FC<INavbarProps> = ({ user }) => {
             </Link>
           );
         }
-        <Link
-          key={item.label}
-          href={item.route}
-          className={`cursor-pointer px-2 ${pathname === item.route ? 'border-b-2 border-primaryYellow' : ''}`}
-        >
-          {item.label}
-        </Link>
+        return null;
       })}
+
       <div className='ml-auto relative'>
         <div
           onClick={() => setShowUserDropDown(!showUserDropDown)}
           className='cursor-pointer flex flex-row items-center'
         >
-          {user.name}
+          {user?.name || 'User'}
           {!showUserDropDown ? (
             <FaAngleDown className='mt-[0.5px] ml-1' />
           ) : (
@@ -78,3 +71,4 @@ export const Navbar: React.FC<INavbarProps> = ({ user }) => {
     </div>
   );
 };
+
