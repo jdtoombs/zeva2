@@ -1,12 +1,12 @@
 import React from "react";
 import { Navbar } from "./Navbar";
+import { Session } from "next-auth";
 
 export interface IHeaderProps {
-  session: any;
+  session: Session;
 }
 /** Basic Header component containing the BCGOV logo and title of the application. */
 export const Header: React.FC<IHeaderProps> = ({ session }) => {
-  console.log(session.user);
   return (
     <div className="w-full flex flex-col">
       <div className="w-full bg-primaryBlue flex flex-row items-center px-4 text-white">
@@ -18,7 +18,7 @@ export const Header: React.FC<IHeaderProps> = ({ session }) => {
         <span className="text-xl">Zero-Emission Vehicles Reporting System</span>
         <span className="ml-auto">Government of British Columbia</span>
       </div>
-      <Navbar user={session.user} />
+      <Navbar user={session.user ?? ""} />
     </div>
   );
 };

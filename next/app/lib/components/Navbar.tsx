@@ -16,7 +16,7 @@ export interface INavbarOption {
 }
 
 export interface INavbarProps {
-  user: User;
+  user: User | "";
 }
 
 /** Client Component used for navigation */
@@ -25,7 +25,7 @@ export const Navbar: React.FC<INavbarProps> = ({ user }) => {
   const [showUserDropDown, setShowUserDropDown] = React.useState(false);
 
   const navItems: INavbarOption[] = [
-    { label: "Home", route: Routes.Home, roles: [Role.ZEVA_USER] },
+    { label: "Home", route: Routes.Home, roles: [] },
     {
       label: "Compliance Reporting",
       route: Routes.ComplianceReporting,
@@ -34,6 +34,7 @@ export const Navbar: React.FC<INavbarProps> = ({ user }) => {
         Role.DIRECTOR,
         Role.SIGNING_AUTHORITY,
         Role.ORGANIZATION_ADMINISTRATOR,
+        Role.ENGINEER_ANALYST,
       ],
     },
     {
@@ -44,6 +45,7 @@ export const Navbar: React.FC<INavbarProps> = ({ user }) => {
         Role.DIRECTOR,
         Role.SIGNING_AUTHORITY,
         Role.ORGANIZATION_ADMINISTRATOR,
+        Role.ENGINEER_ANALYST,
       ],
     },
     {
@@ -68,7 +70,8 @@ export const Navbar: React.FC<INavbarProps> = ({ user }) => {
       {navItems.map((item) => {
         if (
           item.roles.some((role) => user.roles?.includes(role)) ||
-          user.roles?.includes(Role.ADMINISTRATOR)
+          user.roles?.includes(Role.ADMINISTRATOR) ||
+          !item.roles.length
         ) {
           return (
             <Link
